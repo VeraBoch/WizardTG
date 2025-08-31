@@ -136,32 +136,14 @@
         </div>
 
         <div class="nav-links">
-            <a href="/WizardTG/dashboard" class="nav-link">Панель управления</a>
-            <a href="/WizardTG/settings" class="nav-link">Настройки</a>
-            <a href="/WizardTG/" class="nav-link">Главная</a>
+            <a href="dashboard.html" class="nav-link">Панель управления</a>
+            <a href="settings.html" class="nav-link">Настройки</a>
+            <a href="index.html" class="nav-link">Главная</a>
         </div>
 
         <div class="version">
             Версия 1.0.0 | GitHub Pages работает корректно
         </div>
     </div>
-
-    <script>
-        // Простая навигация для демонстрации
-        document.querySelectorAll('.nav-link').forEach(link => {
-            link.addEventListener('click', function(e) {
-                e.preventDefault();
-                const href = this.getAttribute('href');
-                const path = href.replace('/WizardTG', '');
-                
-                if (path === '/') {
-                    window.location.href = '/WizardTG/';
-                } else {
-                    // Показываем сообщение о том, что это демо
-                    alert('Это демо-версия. В полной версии здесь будет ' + path);
-                }
-            });
-        });
-    </script>
 </body>
 </html>

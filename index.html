@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WizardTG - Панель управления</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 3rem;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            max-width: 600px;
+            width: 90%;
+        }
+
+        .logo {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .status {
+            background: #4CAF50;
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 25px;
+            display: inline-block;
+            margin: 1rem 0;
+            font-weight: bold;
+        }
+
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin: 2rem 0;
+        }
+
+        .feature {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .feature:hover {
+            transform: translateY(-5px);
+        }
+
+        .feature h3 {
+            color: #333;
+            margin-bottom: 0.5rem;
+        }
+
+        .feature p {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .nav-links {
+            margin-top: 2rem;
+        }
+
+        .nav-link {
+            display: inline-block;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            text-decoration: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 25px;
+            margin: 0.5rem;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .nav-link:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+        }
+
+        .version {
+            margin-top: 2rem;
+            color: #666;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="logo">🧙‍♂️</div>
+        <h1>WizardTG</h1>
+        <div class="status">✅ Система активна</div>
+        
+        <p>Современная панель управления для Telegram ботов</p>
+        
+        <div class="features">
+            <div class="feature">
+                <h3>📊 Мониторинг</h3>
+                <p>Отслеживание активности ботов и пользователей</p>
+            </div>
+            <div class="feature">
+                <h3>⚙️ Управление</h3>
+                <p>Настройка параметров и конфигурации</p>
+            </div>
+            <div class="feature">
+                <h3>📈 Аналитика</h3>
+                <p>Детальная статистика и отчеты</p>
+            </div>
+        </div>
+
+        <div class="nav-links">
+            <a href="/WizardTG/dashboard" class="nav-link">Панель управления</a>
+            <a href="/WizardTG/settings" class="nav-link">Настройки</a>
+            <a href="/WizardTG/" class="nav-link">Главная</a>
+        </div>
+
+        <div class="version">
+            Версия 1.0.0 | GitHub Pages работает корректно
+        </div>
+    </div>
+
+    <script>
+        // Простая навигация для демонстрации
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                const href = this.getAttribute('href');
+                const path = href.replace('/WizardTG', '');
+                
+                if (path === '/') {
+                    window.location.href = '/WizardTG/';
+                } else {
+                    // Показываем сообщение о том, что это демо
+                    alert('Это демо-версия. В полной версии здесь будет ' + path);
+                }
+            });
+        });
+    </script>
+</body>
+</html>

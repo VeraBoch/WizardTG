@@ -683,14 +683,15 @@
                 
                 window.addEventListener('message', messageListener);
                 
-                // Fallback для демо (если OAuth не настроен)
+                // Timeout для закрытия popup если авторизация не завершилась
                 setTimeout(() => {
                     if (!popup.closed) {
-                        button.textContent = 'Демо режим';
-                        alert('Демо: В реальном приложении здесь будет OAuth авторизация Google\n\nДля работы нужно настроить:\n1. Google Cloud Console проект\n2. OAuth 2.0 Client ID\n3. Google Sheets API\n4. Google Drive API');
                         popup.close();
+                        button.textContent = originalText;
+                        button.disabled = false;
+                        alert('Авторизация не завершена. Попробуйте еще раз.');
                     }
-                }, 5000);
+                }, 30000);
                 
             } catch (error) {
                 console.error('Error creating Google Sheets:', error);
@@ -758,13 +759,13 @@
             
             window.addEventListener('message', messageListener);
             
-            // Fallback для демо
+            // Timeout для закрытия popup если авторизация не завершилась
             setTimeout(() => {
                 if (!popup.closed) {
-                    alert('Демо: Google Calendar подключен!\n\nВ реальном приложении здесь будет OAuth авторизация');
                     popup.close();
+                    alert('Авторизация не завершена. Попробуйте еще раз.');
                 }
-            }, 2000);
+            }, 30000);
         }
 
         function addFAQ() {
@@ -822,7 +823,39 @@
         }
 
         function startBot() {
-            alert('Бот запущен!\n\nВ реальном приложении здесь будет запуск Telegram бота с вашими настройками');
+            // Собираем все настройки
+            const settings = {
+                projectName: document.getElementById('project-name').value,
+                projectDescription: document.getElementById('project-description').value,
+                botToken: document.getElementById('bot-token').value,
+                parentsChat: document.getElementById('parents-chat').value,
+                staffChat: document.getElementById('staff-chat').value,
+                announcementsChat: document.getElementById('announcements-chat').value,
+                calendarId: document.getElementById('calendar-id').value,
+                faqItems: faqItems,
+                selectedCommands: getSelectedCommands()
+            };
+            
+            // Отправляем настройки на сервер для создания бота
+            fetch('/api/bots/create', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(settings)
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert(`✅ Бот успешно создан!\n\nID: ${data.botId}\nСтатус: ${data.status}\n\nБот готов к работе!`);
+                } else {
+                    alert(`❌ Ошибка создания бота: ${data.error}`);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('❌ Ошибка при создании бота. Попробуйте еще раз.');
+            });
         }
 
         function getSelectedCommands() {
@@ -885,7 +918,8 @@
                 </ul>
             `;
             
-            alert('Переход в панель управления...\n\nВ реальном приложении здесь будет переход к dashboard с вашими настройками');
+            // Переходим в панель управления
+            window.location.href = '/dashboard';
         }
 
         function downloadTemplate() {

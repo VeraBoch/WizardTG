@@ -7,18 +7,18 @@ WORKDIR /app
 # Устанавливаем build tools для компиляции нативных модулей
 RUN apk add --no-cache python3 make g++ sqlite-dev
 
-# Копируем package.json и package-lock.json (если есть)
+# Копируем package.json файлы
 COPY package*.json ./
 COPY server/package*.json ./server/
 
-# Устанавливаем зависимости для сервера и основные зависимости
+# Устанавливаем зависимости
 RUN npm install
 RUN cd server && npm install
 
 # Очищаем build tools для уменьшения размера образа
 RUN apk del python3 make g++
 
-# Копируем весь проект
+# Копируем исходный код
 COPY . .
 
 # Создаем директорию для статических файлов

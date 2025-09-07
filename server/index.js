@@ -72,7 +72,7 @@ app.get('/', (req, res) => {
   res.set('Cache-Control', 'no-cache, no-store, must-revalidate');
   res.set('Pragma', 'no-cache');
   res.set('Expires', '0');
-  res.sendFile(path.join(__dirname, '../public/demo.html'));
+  res.sendFile(path.join(__dirname, '../public/index.html'));
 });
 
 // Temporary route to test if updates work
@@ -115,6 +115,20 @@ app.get('/version', (req, res) => {
 app.get('/google-test', (req, res) => {
   res.set('Cache-Control', 'no-cache, no-store, must-revalidate');
   res.sendFile(path.join(__dirname, '../public/google-test.html'));
+});
+
+// Временный тест для проверки обновления
+app.get('/test-callback', (req, res) => {
+  res.send(`
+    <html>
+      <body style="font-family: Arial, sans-serif; text-align: center; padding: 50px;">
+        <h1>✅ Сервер обновился!</h1>
+        <p>Время: ${new Date().toISOString()}</p>
+        <p>Google OAuth callback должен работать</p>
+        <a href="/onboarding">Вернуться к onboarding</a>
+      </body>
+    </html>
+  `);
 });
 
 // Serve static files (after specific routes)

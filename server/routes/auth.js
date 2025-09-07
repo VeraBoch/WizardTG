@@ -23,7 +23,80 @@ router.get('/google/url', (req, res) => {
   }
 });
 
-// Обработка callback от Google OAuth
+// Обработка callback от Google OAuth (GET запрос от Google)
+router.get('/google/callback', async (req, res) => {
+  try {
+    const { code, error } = req.query;
+    
+    if (error) {
+      console.error('OAuth error:', error);
+      return res.status(400).send(`
+        <html>
+          <body style="font-family: Arial, sans-serif; text-align: center; padding: 50px;">
+            <h2>Ошибка авторизации</h2>
+            <p>Ошибка: ${error}</p>
+            <a href="/onboarding">Вернуться к настройке</a>
+          </body>
+        </html>
+      `);
+    }
+    
+    if (!code) {
+      return res.status(400).send(`
+        <html>
+          <body style="font-family: Arial, sans-serif; text-align: center; padding: 50px;">
+            <h2>Ошибка авторизации</h2>
+            <p>Код авторизации не получен</p>
+            <a href="/onboarding">Вернуться к настройке</a>
+          </body>
+        </html>
+      `);
+    }
+
+    const sheetsService = new GoogleSheetsService();
+    const tokens = await sheetsService.getTokens(code);
+    
+    // Отправляем сообщение в родительское окно
+    res.send(`
+      <html>
+        <body style="font-family: Arial, sans-serif; text-align: center; padding: 50px;">
+          <h2>✅ Авторизация успешна!</h2>
+          <p>Google аккаунт подключен</p>
+          <script>
+            // Отправляем сообщение в родительское окно
+            if (window.opener) {
+              window.opener.postMessage({
+                type: 'GOOGLE_AUTH_SUCCESS',
+                tokens: {
+                  access_token: '${tokens.access_token}',
+                  refresh_token: '${tokens.refresh_token || ''}',
+                  expiry_date: ${tokens.expiry_date || 'null'}
+                }
+              }, window.location.origin);
+              window.close();
+            } else {
+              // Если окно не открыто как popup, перенаправляем
+              window.location.href = '/onboarding';
+            }
+          </script>
+        </body>
+      </html>
+    `);
+  } catch (error) {
+    console.error('Error processing OAuth callback:', error);
+    res.status(500).send(`
+      <html>
+        <body style="font-family: Arial, sans-serif; text-align: center; padding: 50px;">
+          <h2>Ошибка авторизации</h2>
+          <p>Произошла ошибка: ${error.message}</p>
+          <a href="/onboarding">Вернуться к настройке</a>
+        </body>
+      </html>
+    `);
+  }
+});
+
+// Обработка callback от Google OAuth (POST запрос от фронтенда)
 router.post('/google/callback', async (req, res) => {
   try {
     const { code, projectId } = req.body;

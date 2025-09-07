@@ -69,10 +69,16 @@ app.get('/api/health', (req, res) => {
 
 // Serve main pages
 app.get('/', (req, res) => {
+  res.set('Cache-Control', 'no-cache, no-store, must-revalidate');
+  res.set('Pragma', 'no-cache');
+  res.set('Expires', '0');
   res.sendFile(path.join(__dirname, '../public/demo.html'));
 });
 
 app.get('/onboarding', (req, res) => {
+  res.set('Cache-Control', 'no-cache, no-store, must-revalidate');
+  res.set('Pragma', 'no-cache');
+  res.set('Expires', '0');
   res.sendFile(path.join(__dirname, '../public/onboarding.html'));
 });
 

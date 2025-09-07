@@ -60,6 +60,10 @@ app.get('/onboarding', (req, res) => {
   res.sendFile(path.join(__dirname, '../public/onboarding.html'));
 });
 
+app.get('/test', (req, res) => {
+  res.sendFile(path.join(__dirname, '../public/test.html'));
+});
+
 // Serve static files (after specific routes)
 app.use(express.static(path.join(__dirname, '../public')));
 

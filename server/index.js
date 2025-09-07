@@ -101,7 +101,15 @@ app.get('/onboarding-v5', (req, res) => {
     res.set('Cache-Control', 'no-cache, no-store, must-revalidate');
     res.set('Pragma', 'no-cache');
     res.set('Expires', '0');
-    res.sendFile(path.join(__dirname, '../public/onboarding-v5.html'));
+    res.send(`
+        <html>
+            <body style="font-family: Arial, sans-serif; text-align: center; padding: 50px;">
+                <h1>🚀 ОБНОВЛЕНО v5.0! 🚀</h1>
+                <p>Это тест нового маршрута</p>
+                <a href="/onboarding">Вернуться к onboarding</a>
+            </body>
+        </html>
+    `);
 });
 
 app.get('/test', (req, res) => {

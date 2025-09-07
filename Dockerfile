@@ -4,13 +4,18 @@ FROM node:18-alpine
 # Устанавливаем рабочую директорию
 WORKDIR /app
 
+# Устанавливаем build tools для компиляции нативных модулей
+RUN apk add --no-cache python3 make g++ sqlite-dev
+
 # Копируем package.json и package-lock.json (если есть)
 COPY package*.json ./
 COPY server/package*.json ./server/
 
-# Устанавливаем зависимости
-RUN npm install
+# Устанавливаем зависимости для сервера
 RUN cd server && npm install
+
+# Очищаем build tools для уменьшения размера образа
+RUN apk del python3 make g++
 
 # Копируем весь проект
 COPY . .

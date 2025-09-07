@@ -5,7 +5,7 @@ PORT=3000
 # Google OAuth
 GOOGLE_CLIENT_ID=819148666788-inajit5sc8mcg0fv3ka0ud2uoe87lttj.apps.googleusercontent.com
 GOOGLE_CLIENT_SECRET=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
-GOOGLE_REDIRECT_URI=https://your-app-name.koyeb.app/auth/google/callback
+GOOGLE_REDIRECT_URI=https://confident-heida-verabochkareva-3b6eaaed.koyeb.app/auth/google/callback
 
 # Database
 DATABASE_URL=sqlite:///app/data/telegram_wizard.db

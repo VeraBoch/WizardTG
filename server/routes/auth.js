@@ -62,6 +62,7 @@ router.get('/google/callback', async (req, res) => {
         <body style="font-family: Arial, sans-serif; text-align: center; padding: 50px;">
           <h2>✅ Авторизация успешна!</h2>
           <p>Google аккаунт подключен</p>
+          <p>Окно закроется автоматически...</p>
           <script>
             // Отправляем сообщение в родительское окно
             if (window.opener) {
@@ -72,11 +73,17 @@ router.get('/google/callback', async (req, res) => {
                   refresh_token: '${tokens.refresh_token || ''}',
                   expiry_date: ${tokens.expiry_date || 'null'}
                 }
-              }, window.location.origin);
-              window.close();
+              }, '*');
+              
+              // Закрываем popup через небольшую задержку
+              setTimeout(() => {
+                window.close();
+              }, 1000);
             } else {
               // Если окно не открыто как popup, перенаправляем
-              window.location.href = '/onboarding';
+              setTimeout(() => {
+                window.location.href = '/onboarding';
+              }, 2000);
             }
           </script>
         </body>

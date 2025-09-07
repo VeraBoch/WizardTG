@@ -621,18 +621,13 @@
                     if (event.origin !== window.location.origin) return;
                     
                     if (event.data.type === 'GOOGLE_AUTH_SUCCESS') {
-                        const { code } = event.data;
+                        const { tokens } = event.data;
                         
-                        // Отправляем код на сервер для получения токенов
-                        const tokenResponse = await fetch('/api/auth/google/callback', {
-                            method: 'POST',
-                            headers: {
-                                'Content-Type': 'application/json'
-                            },
-                            body: JSON.stringify({ code, projectId })
-                        });
-                        
-                        const tokenData = await tokenResponse.json();
+                        // Токены уже получены, используем их напрямую
+                        const tokenData = {
+                            success: true,
+                            tokens: tokens
+                        };
                         
                         if (tokenData.success) {
                             // Создаем таблицу с токенами пользователя
@@ -746,7 +741,7 @@
                 if (event.origin !== window.location.origin) return;
                 
                 if (event.data.type === 'GOOGLE_AUTH_SUCCESS') {
-                    document.getElementById('calendar-id').value = event.data.calendarId;
+                    // Google Calendar подключен
                     alert('Google Calendar успешно подключен!');
                     popup.close();
                     window.removeEventListener('message', messageListener);

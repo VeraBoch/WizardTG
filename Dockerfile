@@ -11,7 +11,8 @@ RUN apk add --no-cache python3 make g++ sqlite-dev
 COPY package*.json ./
 COPY server/package*.json ./server/
 
-# Устанавливаем зависимости для сервера
+# Устанавливаем зависимости для сервера и основные зависимости
+RUN npm install
 RUN cd server && npm install
 
 # Очищаем build tools для уменьшения размера образа

@@ -618,9 +618,18 @@
                 
                 // Слушаем сообщения от popup окна
                 const messageListener = async (event) => {
-                    if (event.origin !== window.location.origin) return;
+                    console.log('Message received:', event);
+                    console.log('Event origin:', event.origin);
+                    console.log('Window origin:', window.location.origin);
+                    console.log('Event data:', event.data);
+                    
+                    if (event.origin !== window.location.origin) {
+                        console.log('Origin mismatch, ignoring message');
+                        return;
+                    }
                     
                     if (event.data.type === 'GOOGLE_AUTH_SUCCESS') {
+                        console.log('Google auth success received');
                         const { tokens } = event.data;
                         
                         // Токены уже получены, используем их напрямую

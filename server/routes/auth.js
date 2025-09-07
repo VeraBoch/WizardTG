@@ -64,8 +64,12 @@ router.get('/google/callback', async (req, res) => {
           <p>Google аккаунт подключен</p>
           <p>Окно закроется автоматически...</p>
           <script>
+            console.log('OAuth callback loaded');
+            console.log('window.opener:', window.opener);
+            
             // Отправляем сообщение в родительское окно
-            if (window.opener) {
+            if (window.opener && !window.opener.closed) {
+              console.log('Sending message to parent window');
               window.opener.postMessage({
                 type: 'GOOGLE_AUTH_SUCCESS',
                 tokens: {
@@ -77,9 +81,11 @@ router.get('/google/callback', async (req, res) => {
               
               // Закрываем popup через небольшую задержку
               setTimeout(() => {
+                console.log('Closing popup');
                 window.close();
               }, 1000);
             } else {
+              console.log('No opener or opener closed, redirecting');
               // Если окно не открыто как popup, перенаправляем
               setTimeout(() => {
                 window.location.href = '/onboarding';

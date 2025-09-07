@@ -75,6 +75,20 @@ app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, '../public/demo.html'));
 });
 
+// Temporary route to test if updates work
+app.get('/temp', (req, res) => {
+  res.set('Cache-Control', 'no-cache, no-store, must-revalidate');
+  res.send(`
+    <html>
+      <body style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; font-family: Arial; text-align: center; padding: 50px;">
+        <h1>🎉 ОБНОВЛЕНИЯ РАБОТАЮТ! v3.0</h1>
+        <p>Если вы видите эту страницу - сервер обновился!</p>
+        <a href="/onboarding" style="color: white; text-decoration: underline;">Перейти к onboarding</a>
+      </body>
+    </html>
+  `);
+});
+
 app.get('/onboarding', (req, res) => {
   res.set('Cache-Control', 'no-cache, no-store, must-revalidate');
   res.set('Pragma', 'no-cache');

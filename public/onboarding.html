@@ -366,6 +366,9 @@
                             <button onclick="createGoogleSheets()" class="bg-green-500 text-white font-semibold py-2 px-4 rounded-lg hover:bg-green-600 transition-colors">
                                 Создать таблицу
                             </button>
+                            <button onclick="testPopup()" class="bg-red-500 text-white font-semibold py-2 px-4 rounded-lg hover:bg-red-600 transition-colors ml-2">
+                                Тест Popup
+                            </button>
                         </div>
                         
                         <div class="text-white/60 text-xs space-y-1">
@@ -733,6 +736,54 @@
                 
                 alert(`✅ Google таблица подключена!\n\nID: ${sheetId}\nСсылка: https://docs.google.com/spreadsheets/d/${sheetId}/edit`);
             }, 1500);
+        }
+
+        function testPopup() {
+            console.log('Testing popup communication...');
+            
+            // Создаем тестовый popup
+            const popup = window.open('about:blank', 'test-popup', 'width=400,height=300');
+            
+            // Записываем тестовую страницу в popup
+            popup.document.write(`
+                <html>
+                    <body style="padding: 20px; font-family: Arial;">
+                        <h2>Тест Popup</h2>
+                        <p>Это тестовый popup для проверки связи</p>
+                        <button onclick="sendTestMessage()">Отправить сообщение</button>
+                        <script>
+                            function sendTestMessage() {
+                                console.log('Sending test message...');
+                                window.opener.postMessage({
+                                    type: 'TEST_MESSAGE',
+                                    data: 'Hello from popup!'
+                                }, '*');
+                                window.close();
+                            }
+                        </script>
+                    </body>
+                </html>
+            `);
+            
+            // Слушаем сообщения от popup
+            const messageListener = (event) => {
+                console.log('Test message received:', event);
+                if (event.data.type === 'TEST_MESSAGE') {
+                    alert('✅ Popup communication works! Message: ' + event.data.data);
+                    window.removeEventListener('message', messageListener);
+                }
+            };
+            
+            window.addEventListener('message', messageListener);
+            
+            // Timeout
+            setTimeout(() => {
+                if (!popup.closed) {
+                    popup.close();
+                    alert('❌ Popup test timeout');
+                    window.removeEventListener('message', messageListener);
+                }
+            }, 10000);
         }
 
         function connectGoogle() {

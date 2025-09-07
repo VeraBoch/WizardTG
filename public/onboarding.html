@@ -669,7 +669,10 @@
                             throw new Error(tokenData.error || 'Failed to get tokens');
                         }
                         
-                        popup.close();
+                        // Закрываем popup и убираем слушатель
+                        if (popup && !popup.closed) {
+                            popup.close();
+                        }
                         window.removeEventListener('message', messageListener);
                     } else if (event.data.type === 'GOOGLE_AUTH_ERROR') {
                         throw new Error('Google authorization failed');
@@ -694,6 +697,9 @@
                 button.classList.remove('bg-green-500', 'hover:bg-green-600');
                 button.classList.add('bg-red-500');
                 alert(`Ошибка: ${error.message}`);
+                if (popup && !popup.closed) {
+                    popup.close();
+                }
             }
         }
 
@@ -743,11 +749,15 @@
                 if (event.data.type === 'GOOGLE_AUTH_SUCCESS') {
                     // Google Calendar подключен
                     alert('Google Calendar успешно подключен!');
-                    popup.close();
+                    if (popup && !popup.closed) {
+                        popup.close();
+                    }
                     window.removeEventListener('message', messageListener);
                 } else if (event.data.type === 'GOOGLE_AUTH_ERROR') {
                     alert('Ошибка подключения к Google Calendar');
-                    popup.close();
+                    if (popup && !popup.closed) {
+                        popup.close();
+                    }
                     window.removeEventListener('message', messageListener);
                 }
             };

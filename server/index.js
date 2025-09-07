@@ -35,9 +35,6 @@ app.use(limiter);
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true }));
 
-// Serve static files
-app.use(express.static(path.join(__dirname, '../public')));
-
 // Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/projects', projectRoutes);
@@ -54,15 +51,6 @@ app.get('/api/health', (req, res) => {
   });
 });
 
-// Error handling middleware
-app.use((err, req, res, next) => {
-  console.error(err.stack);
-  res.status(500).json({ 
-    error: 'Something went wrong!',
-    message: process.env.NODE_ENV === 'development' ? err.message : 'Internal server error'
-  });
-});
-
 // Serve main pages
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, '../public/demo.html'));
@@ -70,6 +58,18 @@ app.get('/', (req, res) => {
 
 app.get('/onboarding', (req, res) => {
   res.sendFile(path.join(__dirname, '../public/onboarding.html'));
+});
+
+// Serve static files (after specific routes)
+app.use(express.static(path.join(__dirname, '../public')));
+
+// Error handling middleware
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).json({ 
+    error: 'Something went wrong!',
+    message: process.env.NODE_ENV === 'development' ? err.message : 'Internal server error'
+  });
 });
 
 // 404 handler

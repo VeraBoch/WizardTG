@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Telegram Wizard - Ваш телеграм ассистент</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .gradient-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+    </style>
+</head>
+<body class="min-h-screen gradient-bg">
+    <div class="container mx-auto px-4 py-8">
+        <!-- Header -->
+        <div class="text-center mb-8">
+            <div class="flex items-center justify-center space-x-3 mb-4">
+                <div class="w-12 h-12 bg-white rounded-xl flex items-center justify-center">
+                    <svg class="w-8 h-8 text-gray-800" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+                    </svg>
+                </div>
+                <span class="text-3xl font-bold text-white">Telegram Wizard</span>
+            </div>
+            <h1 class="text-4xl font-bold text-white mb-2">
+                Добро пожаловать!
+            </h1>
+            <p class="text-white/80 text-lg">
+                Ваш телеграм ассистент
+            </p>
+        </div>
+
+        <!-- Features -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+            <div class="glass-effect rounded-xl p-6 text-white">
+                <div class="w-12 h-12 bg-blue-500 rounded-lg flex items-center justify-center mb-4">
+                    <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+                    </svg>
+                </div>
+                <h3 class="text-xl font-semibold mb-2">Быстрый старт</h3>
+                <p class="text-white/80">Создайте бота за 5 минут с помощью пошагового мастера</p>
+            </div>
+            
+            <div class="glass-effect rounded-xl p-6 text-white">
+                <div class="w-12 h-12 bg-green-500 rounded-lg flex items-center justify-center mb-4">
+                    <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
+                    </svg>
+                </div>
+                <h3 class="text-xl font-semibold mb-2">Автоматизация</h3>
+                <p class="text-white/80">Настройте все рабочие чаты, автоматизируйте сбор информации и публикации</p>
+            </div>
+            
+            <div class="glass-effect rounded-xl p-6 text-white">
+                <div class="w-12 h-12 bg-purple-500 rounded-lg flex items-center justify-center mb-4">
+                    <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/>
+                    </svg>
+                </div>
+                <h3 class="text-xl font-semibold mb-2">AI Интеграция</h3>
+                <p class="text-white/80">Умные ответы с помощью OpenAI и базы знаний</p>
+            </div>
+        </div>
+
+        <!-- Demo Sections -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <!-- Login Form -->
+            <div class="glass-effect rounded-xl p-8">
+                <h2 class="text-2xl font-bold text-white mb-6">Вход в систему</h2>
+                <form class="space-y-4">
+                    <div>
+                        <label class="block text-white/80 text-sm font-medium mb-2">Email</label>
+                        <input type="email" value="admin@botwizard.com" 
+                               class="w-full px-4 py-3 rounded-lg bg-white/10 border border-white/20 text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-white/50">
+                    </div>
+                    <div>
+                        <label class="block text-white/80 text-sm font-medium mb-2">Пароль</label>
+                        <input type="password" value="admin123" 
+                               class="w-full px-4 py-3 rounded-lg bg-white/10 border border-white/20 text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-white/50">
+                    </div>
+                    <button type="button" onclick="showDemo()" 
+                            class="w-full bg-white text-gray-900 font-semibold py-3 px-6 rounded-lg hover:bg-white/90 transition-colors">
+                        Войти
+                    </button>
+                </form>
+            </div>
+
+            <!-- Dashboard Preview -->
+            <div class="glass-effect rounded-xl p-8">
+                <h2 class="text-2xl font-bold text-white mb-6">Панель управления</h2>
+                <div class="space-y-4">
+                    <div class="flex items-center justify-between p-4 bg-white/10 rounded-lg">
+                        <div class="flex items-center space-x-3">
+                            <div class="w-10 h-10 bg-blue-500 rounded-lg flex items-center justify-center">
+                                <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 4V2a1 1 0 011-1h8a1 1 0 011 1v2m-9 0h10m-10 0a2 2 0 00-2 2v14a2 2 0 002 2h10a2 2 0 002-2V6a2 2 0 00-2-2"/>
+                                </svg>
+                            </div>
+                            <div>
+                                <p class="text-white font-medium">Школа рисования</p>
+                                <p class="text-white/60 text-sm">Активен • 45 пользователей</p>
+                            </div>
+                        </div>
+                        <span class="px-3 py-1 bg-green-500/20 text-green-300 rounded-full text-sm">Активен</span>
+                    </div>
+                    
+                    <div class="flex items-center justify-between p-4 bg-white/10 rounded-lg">
+                        <div class="flex items-center space-x-3">
+                            <div class="w-10 h-10 bg-green-500 rounded-lg flex items-center justify-center">
+                                <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
+                                </svg>
+                            </div>
+                            <div>
+                                <p class="text-white font-medium">Курсы английского</p>
+                                <p class="text-white/60 text-sm">Активен • 32 пользователя</p>
+                            </div>
+                        </div>
+                        <span class="px-3 py-1 bg-green-500/20 text-green-300 rounded-full text-sm">Активен</span>
+                    </div>
+                    
+                    <div class="flex items-center justify-between p-4 bg-white/10 rounded-lg">
+                        <div class="flex items-center space-x-3">
+                            <div class="w-10 h-10 bg-purple-500 rounded-lg flex items-center justify-center">
+                                <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+                                </svg>
+                            </div>
+                            <div>
+                                <p class="text-white font-medium">Спортивная секция</p>
+                                <p class="text-white/60 text-sm">Неактивен • 18 пользователей</p>
+                            </div>
+                        </div>
+                        <span class="px-3 py-1 bg-gray-500/20 text-gray-300 rounded-full text-sm">Неактивен</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Status -->
+        <div class="text-center mt-8">
+            <div class="glass-effect rounded-xl p-6 inline-block">
+                <div class="flex items-center space-x-4 text-white">
+                    <div class="w-3 h-3 bg-green-500 rounded-full animate-pulse"></div>
+                    <span class="font-medium">Backend API: Работает (порт 5000)</span>
+                </div>
+                <div class="flex items-center space-x-4 text-white mt-2">
+                    <div class="w-3 h-3 bg-yellow-500 rounded-full animate-pulse"></div>
+                    <span class="font-medium">Frontend: В разработке</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function showDemo() {
+            alert('Демо версия! Полная версия будет доступна после настройки React приложения.\n\nBackend API работает на http://localhost:5000');
+        }
+    </script>
+</body>
+</html>

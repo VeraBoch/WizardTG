@@ -1,0 +1,4 @@
+🚀 Server running on port 3000
+📊 Health check: http://localhost:3000/api/health
+🌍 Environment: development
+✅ Connected to SQLite database

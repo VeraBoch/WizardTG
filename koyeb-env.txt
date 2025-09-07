@@ -1,0 +1,22 @@
+# Koyeb Environment Variables
+NODE_ENV=production
+PORT=3000
+
+# Google OAuth
+GOOGLE_CLIENT_ID=819148666788-inajit5sc8mcg0fv3ka0ud2uoe87lttj.apps.googleusercontent.com
+GOOGLE_CLIENT_SECRET=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
+GOOGLE_REDIRECT_URI=https://your-app-name.koyeb.app/auth/google/callback
+
+# Database
+DATABASE_URL=sqlite:///app/data/telegram_wizard.db
+
+# Security
+JWT_SECRET=your-super-secret-jwt-key-change-this-in-production
+SESSION_SECRET=your-super-secret-session-key-change-this-in-production
+
+# Telegram Bot (будет добавлен позже)
+# TELEGRAM_BOT_TOKEN=your-bot-token
+# TELEGRAM_WEBHOOK_URL=https://your-app-name.koyeb.app/webhook
+
+# OpenAI (будет добавлен позже)
+# OPENAI_API_KEY=your-openai-api-key

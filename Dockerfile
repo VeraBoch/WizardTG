@@ -1,0 +1,33 @@
+# Используем официальный Node.js образ
+FROM node:18-alpine
+
+# Устанавливаем рабочую директорию
+WORKDIR /app
+
+# Копируем package.json и package-lock.json (если есть)
+COPY package*.json ./
+COPY server/package*.json ./server/
+
+# Устанавливаем зависимости
+RUN npm install
+RUN cd server && npm install
+
+# Копируем весь проект
+COPY . .
+
+# Создаем директорию для статических файлов
+RUN mkdir -p public
+
+# Копируем HTML файлы в public
+COPY demo.html public/
+COPY onboarding.html public/
+COPY faq-template.csv public/
+
+# Создаем директорию для базы данных
+RUN mkdir -p data
+
+# Открываем порт
+EXPOSE 3000
+
+# Запускаем приложение
+CMD ["node", "server/index.js"]

@@ -172,6 +172,52 @@ app.use((err, req, res, next) => {
   });
 });
 
+// Новый маршрут для onboarding с обходом кэша
+app.get('/onboarding-new', (req, res) => {
+  res.send(`
+    <!DOCTYPE html>
+    <html lang="ru">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Telegram Wizard - Настройка бота</title>
+        <script src="https://cdn.tailwindcss.com"></script>
+        <style>
+            .gradient-bg {
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            }
+            .glass-effect {
+                background: rgba(255, 255, 255, 0.1);
+                backdrop-filter: blur(10px);
+                border: 1px solid rgba(255, 255, 255, 0.2);
+            }
+        </style>
+    </head>
+    <body class="gradient-bg min-h-screen">
+        <div class="container mx-auto px-4 py-8">
+            <div class="text-center mb-8">
+                <h1 class="text-4xl font-bold text-white mb-4">
+                    🚀 ОБНОВЛЕНО v6.0! 🚀
+                </h1>
+                <p class="text-white/80 text-lg">Настройка вашего бота</p>
+                <p class="text-white/60 text-sm mt-2">Время: ${new Date().toISOString()}</p>
+            </div>
+            
+            <div class="max-w-2xl mx-auto">
+                <div class="glass-effect rounded-lg p-6 text-white">
+                    <h2 class="text-2xl font-semibold mb-4">✅ Новый маршрут работает!</h2>
+                    <p class="mb-4">Этот маршрут обходит кэширование статических файлов.</p>
+                    <a href="/onboarding" class="bg-blue-500 hover:bg-blue-600 text-white px-6 py-2 rounded-lg inline-block">
+                        Перейти к основному onboarding
+                    </a>
+                </div>
+            </div>
+        </div>
+    </body>
+    </html>
+  `);
+});
+
 // 404 handler
 app.use('*', (req, res) => {
   res.status(404).json({ error: 'Route not found' });

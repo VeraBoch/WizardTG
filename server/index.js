@@ -93,6 +93,11 @@ app.get('/new', (req, res) => {
   res.sendFile(path.join(__dirname, '../public/demo-new.html'));
 });
 
+app.get('/version', (req, res) => {
+  res.set('Cache-Control', 'no-cache, no-store, must-revalidate');
+  res.sendFile(path.join(__dirname, '../public/version.txt'));
+});
+
 // Serve static files (after specific routes)
 app.use(express.static(path.join(__dirname, '../public')));
 

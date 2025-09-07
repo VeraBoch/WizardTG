@@ -1,6 +1,9 @@
 # Используем официальный Node.js образ
 FROM node:18-alpine
 
+# Добавляем метку времени для принудительного обновления
+LABEL build_date="2025-09-07T02:30:00Z"
+
 # Устанавливаем рабочую директорию
 WORKDIR /app
 
@@ -28,6 +31,9 @@ RUN mkdir -p public
 COPY demo.html public/
 COPY onboarding.html public/
 COPY faq-template.csv public/
+
+# Добавляем версию для обхода кэша
+RUN echo "Build version: $(date)" > public/version.txt
 
 # Создаем директорию для базы данных
 RUN mkdir -p data

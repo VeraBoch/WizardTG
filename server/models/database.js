@@ -49,6 +49,19 @@ class Database {
         FOREIGN KEY (user_id) REFERENCES users (id)
       )`,
 
+      // Bots table
+      `CREATE TABLE IF NOT EXISTS bots (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        project_id INTEGER,
+        token TEXT NOT NULL,
+        parents_chat_id TEXT,
+        staff_chat_id TEXT,
+        announcements_chat_id TEXT,
+        status TEXT DEFAULT 'active',
+        created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+        FOREIGN KEY (project_id) REFERENCES projects (id)
+      )`,
+
       // Channels table
       `CREATE TABLE IF NOT EXISTS channels (
         id INTEGER PRIMARY KEY AUTOINCREMENT,

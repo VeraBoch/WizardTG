@@ -727,50 +727,51 @@
         }
 
         function connectGoogle() {
-            // В реальном приложении здесь будет OAuth авторизация
-            const clientId = 'your-google-client-id';
-            const redirectUri = window.location.origin + '/auth/google/callback';
-            const scope = 'https://www.googleapis.com/auth/calendar.readonly';
+            // Используем тот же OAuth flow что и для Sheets
+            fetch('/api/auth/google/url')
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        // Открываем OAuth окно
+                        const popup = window.open(data.authUrl, 'google-auth', 'width=500,height=600');
             
-            const authUrl = `https://accounts.google.com/o/oauth2/v2/auth?` +
-                `client_id=${clientId}&` +
-                `redirect_uri=${encodeURIComponent(redirectUri)}&` +
-                `scope=${encodeURIComponent(scope)}&` +
-                `response_type=code&` +
-                `access_type=offline`;
-            
-            // Открываем OAuth окно
-            const popup = window.open(authUrl, 'google-auth', 'width=500,height=600');
-            
-            // Слушаем сообщения от popup окна
-            const messageListener = (event) => {
-                if (event.origin !== window.location.origin) return;
-                
-                if (event.data.type === 'GOOGLE_AUTH_SUCCESS') {
-                    // Google Calendar подключен
-                    alert('Google Calendar успешно подключен!');
-                    if (popup && !popup.closed) {
-                        popup.close();
+                        // Слушаем сообщения от popup окна
+                        const messageListener = (event) => {
+                            if (event.origin !== window.location.origin) return;
+                            
+                            if (event.data.type === 'GOOGLE_AUTH_SUCCESS') {
+                                // Google Calendar подключен
+                                alert('Google Calendar успешно подключен!');
+                                if (popup && !popup.closed) {
+                                    popup.close();
+                                }
+                                window.removeEventListener('message', messageListener);
+                            } else if (event.data.type === 'GOOGLE_AUTH_ERROR') {
+                                alert('Ошибка подключения к Google Calendar');
+                                if (popup && !popup.closed) {
+                                    popup.close();
+                                }
+                                window.removeEventListener('message', messageListener);
+                            }
+                        };
+                        
+                        window.addEventListener('message', messageListener);
+                        
+                        // Timeout для закрытия popup если авторизация не завершилась
+                        setTimeout(() => {
+                            if (!popup.closed) {
+                                popup.close();
+                                alert('Авторизация не завершена. Попробуйте еще раз.');
+                            }
+                        }, 30000);
+                    } else {
+                        alert('Ошибка получения OAuth URL');
                     }
-                    window.removeEventListener('message', messageListener);
-                } else if (event.data.type === 'GOOGLE_AUTH_ERROR') {
+                })
+                .catch(error => {
+                    console.error('Error:', error);
                     alert('Ошибка подключения к Google Calendar');
-                    if (popup && !popup.closed) {
-                        popup.close();
-                    }
-                    window.removeEventListener('message', messageListener);
-                }
-            };
-            
-            window.addEventListener('message', messageListener);
-            
-            // Timeout для закрытия popup если авторизация не завершилась
-            setTimeout(() => {
-                if (!popup.closed) {
-                    popup.close();
-                    alert('Авторизация не завершена. Попробуйте еще раз.');
-                }
-            }, 30000);
+                });
         }
 
         function addFAQ() {

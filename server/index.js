@@ -1,30 +1,19 @@
 const express = require('express');
 const cors = require('cors');
-const helmet = require('helmet');
-const rateLimit = require('express-rate-limit');
 const path = require('path');
+const helmet = require('helmet');
 require('dotenv').config();
 
-const authRoutes = require('./routes/auth');
-const projectRoutes = require('./routes/projects');
-const botRoutes = require('./routes/bots');
-const analyticsRoutes = require('./routes/analytics');
-const sheetsRoutes = require('./routes/sheets');
-
 const app = express();
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 3000;
 
-// Trust proxy for rate limiting behind reverse proxy
-app.set('trust proxy', 1);
-
-// Security middleware
+// Middleware
 app.use(helmet({
   contentSecurityPolicy: {
     directives: {
-      defaultSrc: ["'self'"],
+      scriptSrcAttr: ["'unsafe-inline'"],
       styleSrc: ["'self'", "'unsafe-inline'", "https:"],
       scriptSrc: ["'self'", "'unsafe-inline'", "https:"],
-      scriptSrcAttr: ["'unsafe-inline'"],
       imgSrc: ["'self'", "data:", "https:"],
       fontSrc: ["'self'", "https:", "data:"],
       connectSrc: ["'self'"],
@@ -32,43 +21,42 @@ app.use(helmet({
       objectSrc: ["'none'"],
       mediaSrc: ["'self'"],
       manifestSrc: ["'self'"],
-    },
-  },
-}));
-app.use(cors({
-  origin: process.env.FRONTEND_URL || 'http://localhost:3000',
-  credentials: true
+      defaultSrc: ["'self'"]
+    }
+  }
 }));
 
-// Rate limiting
-const limiter = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 100 // limit each IP to 100 requests per windowMs
-});
-app.use(limiter);
-
-// Body parsing middleware
-app.use(express.json({ limit: '10mb' }));
+app.use(cors());
+app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Routes
+// Trust proxy for Koyeb
+app.set('trust proxy', 1);
+
+// Import routes
+const authRoutes = require('./routes/auth');
+const sheetsRoutes = require('./routes/sheets');
+const projectsRoutes = require('./routes/projects');
+const botsRoutes = require('./routes/bots');
+const analyticsRoutes = require('./routes/analytics');
+
+// API routes
 app.use('/api/auth', authRoutes);
-app.use('/auth', authRoutes);
-app.use('/api/projects', projectRoutes);
-app.use('/api/bots', botRoutes);
-app.use('/api/analytics', analyticsRoutes);
 app.use('/api/sheets', sheetsRoutes);
+app.use('/api/projects', projectsRoutes);
+app.use('/api/bots', botsRoutes);
+app.use('/api/analytics', analyticsRoutes);
 
 // Health check
 app.get('/api/health', (req, res) => {
   res.json({ 
     status: 'OK', 
     timestamp: new Date().toISOString(),
-    version: '1.0.0'
+    environment: process.env.NODE_ENV || 'development'
   });
 });
 
-// Serve main pages
+// Main page
 app.get('/', (req, res) => {
   res.set('Cache-Control', 'no-cache, no-store, must-revalidate');
   res.set('Pragma', 'no-cache');
@@ -76,111 +64,26 @@ app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, '../public/index.html'));
 });
 
-// Temporary route to test if updates work
-app.get('/temp', (req, res) => {
-  res.set('Cache-Control', 'no-cache, no-store, must-revalidate');
-  res.send(`
-    <html>
-      <body style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; font-family: Arial; text-align: center; padding: 50px;">
-        <h1>🎉 ОБНОВЛЕНИЯ РАБОТАЮТ! v3.0</h1>
-        <p>Если вы видите эту страницу - сервер обновился!</p>
-        <a href="/onboarding" style="color: white; text-decoration: underline;">Перейти к onboarding</a>
-      </body>
-    </html>
-  `);
-});
-
+// Onboarding page
 app.get('/onboarding', (req, res) => {
-    res.set('Cache-Control', 'no-cache, no-store, must-revalidate');
-    res.set('Pragma', 'no-cache');
-    res.set('Expires', '0');
-    res.sendFile(path.join(__dirname, '../public/onboarding.html'));
-});
-
-app.get('/onboarding-v5', (req, res) => {
-    res.set('Cache-Control', 'no-cache, no-store, must-revalidate');
-    res.set('Pragma', 'no-cache');
-    res.set('Expires', '0');
-    res.send(`
-        <html>
-            <body style="font-family: Arial, sans-serif; text-align: center; padding: 50px;">
-                <h1>🚀 ОБНОВЛЕНО v5.0! 🚀</h1>
-                <p>Это тест нового маршрута</p>
-                <a href="/onboarding">Вернуться к onboarding</a>
-            </body>
-        </html>
-    `);
-});
-
-app.get('/test', (req, res) => {
-  res.sendFile(path.join(__dirname, '../public/test.html'));
-});
-
-app.get('/new', (req, res) => {
   res.set('Cache-Control', 'no-cache, no-store, must-revalidate');
   res.set('Pragma', 'no-cache');
   res.set('Expires', '0');
-  res.sendFile(path.join(__dirname, '../public/demo-new.html'));
+  res.sendFile(path.join(__dirname, '../public/onboarding.html'));
 });
 
-app.get('/version', (req, res) => {
+// Dashboard page
+app.get('/dashboard', (req, res) => {
   res.set('Cache-Control', 'no-cache, no-store, must-revalidate');
-  res.sendFile(path.join(__dirname, '../public/version.txt'));
-});
-
-app.get('/google-test', (req, res) => {
-  res.set('Cache-Control', 'no-cache, no-store, must-revalidate');
-  res.sendFile(path.join(__dirname, '../public/google-test.html'));
-});
-
-// Временный тест для проверки обновления
-app.get('/test-callback', (req, res) => {
-  res.send(`
-    <html>
-      <body style="font-family: Arial, sans-serif; text-align: center; padding: 50px;">
-        <h1>✅ Сервер обновился!</h1>
-        <p>Время: ${new Date().toISOString()}</p>
-        <p>Google OAuth callback должен работать</p>
-        <a href="/onboarding">Вернуться к onboarding</a>
-      </body>
-    </html>
-  `);
-});
-
-app.get('/test-v5', (req, res) => {
-  res.send(`
-    <html>
-      <body style="font-family: Arial, sans-serif; text-align: center; padding: 50px;">
-        <h1>🚀 ОБНОВЛЕНО v5.0! 🚀</h1>
-        <p>Это тест нового маршрута</p>
-        <p>Время: ${new Date().toISOString()}</p>
-        <a href="/onboarding">Вернуться к onboarding</a>
-      </body>
-    </html>
-  `);
-});
-
-// Serve static files (after specific routes)
-app.use(express.static(path.join(__dirname, '../public')));
-
-// Error handling middleware
-app.use((err, req, res, next) => {
-  console.error(err.stack);
-  res.status(500).json({ 
-    error: 'Something went wrong!',
-    message: process.env.NODE_ENV === 'development' ? err.message : 'Internal server error'
-  });
-});
-
-// Новый маршрут для onboarding с обходом кэша
-app.get('/onboarding-new', (req, res) => {
+  res.set('Pragma', 'no-cache');
+  res.set('Expires', '0');
   res.send(`
     <!DOCTYPE html>
     <html lang="ru">
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Telegram Wizard - Настройка бота</title>
+        <title>Telegram Wizard - Dashboard</title>
         <script src="https://cdn.tailwindcss.com"></script>
         <style>
             .gradient-bg {
@@ -197,25 +100,58 @@ app.get('/onboarding-new', (req, res) => {
         <div class="container mx-auto px-4 py-8">
             <div class="text-center mb-8">
                 <h1 class="text-4xl font-bold text-white mb-4">
-                    🚀 ОБНОВЛЕНО v6.0! 🚀
+                    🎛️ Dashboard
                 </h1>
-                <p class="text-white/80 text-lg">Настройка вашего бота</p>
-                <p class="text-white/60 text-sm mt-2">Время: ${new Date().toISOString()}</p>
+                <p class="text-white/80 text-lg">Управление вашими ботами</p>
             </div>
             
-            <div class="max-w-2xl mx-auto">
+            <div class="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 <div class="glass-effect rounded-lg p-6 text-white">
-                    <h2 class="text-2xl font-semibold mb-4">✅ Новый маршрут работает!</h2>
-                    <p class="mb-4">Этот маршрут обходит кэширование статических файлов.</p>
-                    <a href="/onboarding" class="bg-blue-500 hover:bg-blue-600 text-white px-6 py-2 rounded-lg inline-block">
-                        Перейти к основному onboarding
-                    </a>
+                    <h2 class="text-xl font-semibold mb-4">🤖 Боты</h2>
+                    <p class="mb-4">Управление вашими Telegram ботами</p>
+                    <button class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg">
+                        Просмотреть ботов
+                    </button>
                 </div>
+                
+                <div class="glass-effect rounded-lg p-6 text-white">
+                    <h2 class="text-xl font-semibold mb-4">📊 Аналитика</h2>
+                    <p class="mb-4">Статистика и отчеты</p>
+                    <button class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg">
+                        Просмотреть аналитику
+                    </button>
+                </div>
+                
+                <div class="glass-effect rounded-lg p-6 text-white">
+                    <h2 class="text-xl font-semibold mb-4">⚙️ Настройки</h2>
+                    <p class="mb-4">Настройки проекта</p>
+                    <button class="bg-purple-500 hover:bg-purple-600 text-white px-4 py-2 rounded-lg">
+                        Открыть настройки
+                    </button>
+                </div>
+            </div>
+            
+            <div class="text-center mt-8">
+                <a href="/onboarding" class="bg-white/20 hover:bg-white/30 text-white px-6 py-2 rounded-lg">
+                    Создать нового бота
+                </a>
             </div>
         </div>
     </body>
     </html>
   `);
+});
+
+// Serve static files
+app.use(express.static(path.join(__dirname, '../public')));
+
+// Error handling middleware
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).json({
+    error: 'Something went wrong!',
+    message: process.env.NODE_ENV === 'development' ? err.message : 'Internal server error'
+  });
 });
 
 // 404 handler

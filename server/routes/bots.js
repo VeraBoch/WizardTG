@@ -3,6 +3,34 @@ const db = require('../models/database');
 
 const router = express.Router();
 
+// Create bot
+router.post('/create', async (req, res) => {
+  try {
+    const { botToken, parentsChatId, staffChatId, announcementsChatId } = req.body;
+    
+    if (!botToken) {
+      return res.status(400).json({ error: 'Bot token is required' });
+    }
+    
+    // Create bot record in database
+    const stmt = db.prepare(`
+      INSERT INTO bots (token, parents_chat_id, staff_chat_id, announcements_chat_id, status, created_at)
+      VALUES (?, ?, ?, ?, 'active', datetime('now'))
+    `);
+    
+    const result = stmt.run(botToken, parentsChatId, staffChatId, announcementsChatId);
+    
+    res.json({
+      success: true,
+      botId: result.lastInsertRowid,
+      message: 'Bot created successfully'
+    });
+  } catch (error) {
+    console.error('Error creating bot:', error);
+    res.status(500).json({ error: 'Failed to create bot' });
+  }
+});
+
 // Middleware to authenticate JWT token
 function authenticateToken(req, res, next) {
   const authHeader = req.headers['authorization'];

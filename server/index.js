@@ -147,6 +147,19 @@ app.get('/test-callback', (req, res) => {
   `);
 });
 
+app.get('/test-v5', (req, res) => {
+  res.send(`
+    <html>
+      <body style="font-family: Arial, sans-serif; text-align: center; padding: 50px;">
+        <h1>🚀 ОБНОВЛЕНО v5.0! 🚀</h1>
+        <p>Это тест нового маршрута</p>
+        <p>Время: ${new Date().toISOString()}</p>
+        <a href="/onboarding">Вернуться к onboarding</a>
+      </body>
+    </html>
+  `);
+});
+
 // Serve static files (after specific routes)
 app.use(express.static(path.join(__dirname, '../public')));
 

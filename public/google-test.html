@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Тест Google API</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; }
+        .test-section { margin: 20px 0; padding: 20px; border: 1px solid #ccc; border-radius: 5px; }
+        .success { background-color: #d4edda; border-color: #c3e6cb; }
+        .error { background-color: #f8d7da; border-color: #f5c6cb; }
+        button { padding: 10px 20px; margin: 10px 0; background: #007bff; color: white; border: none; border-radius: 5px; cursor: pointer; }
+        button:hover { background: #0056b3; }
+    </style>
+</head>
+<body>
+    <h1>Тест Google API подключения</h1>
+    
+    <div class="test-section">
+        <h3>1. Проверка OAuth URL</h3>
+        <button onclick="testOAuthUrl()">Получить OAuth URL</button>
+        <div id="oauth-result"></div>
+    </div>
+    
+    <div class="test-section">
+        <h3>2. Проверка переменных окружения</h3>
+        <button onclick="testEnvVars()">Проверить переменные</button>
+        <div id="env-result"></div>
+    </div>
+    
+    <div class="test-section">
+        <h3>3. Тест Google Sheets API</h3>
+        <button onclick="testSheetsAPI()">Тест Sheets API</button>
+        <div id="sheets-result"></div>
+    </div>
+
+    <script>
+        async function testOAuthUrl() {
+            try {
+                const response = await fetch('/api/auth/google/url');
+                const data = await response.json();
+                
+                const resultDiv = document.getElementById('oauth-result');
+                if (data.success) {
+                    resultDiv.innerHTML = `
+                        <div class="success">
+                            <p>✅ OAuth URL получен успешно!</p>
+                            <p><strong>URL:</strong> ${data.authUrl}</p>
+                            <a href="${data.authUrl}" target="_blank">Открыть в новой вкладке</a>
+                        </div>
+                    `;
+                } else {
+                    resultDiv.innerHTML = `
+                        <div class="error">
+                            <p>❌ Ошибка: ${data.error}</p>
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                document.getElementById('oauth-result').innerHTML = `
+                    <div class="error">
+                        <p>❌ Ошибка сети: ${error.message}</p>
+                    </div>
+                `;
+            }
+        }
+        
+        async function testEnvVars() {
+            try {
+                const response = await fetch('/api/auth/google/url');
+                const data = await response.json();
+                
+                const resultDiv = document.getElementById('env-result');
+                if (data.success && data.authUrl) {
+                    const url = new URL(data.authUrl);
+                    const clientId = url.searchParams.get('client_id');
+                    const redirectUri = url.searchParams.get('redirect_uri');
+                    
+                    resultDiv.innerHTML = `
+                        <div class="success">
+                            <p>✅ Переменные окружения настроены!</p>
+                            <p><strong>Client ID:</strong> ${clientId}</p>
+                            <p><strong>Redirect URI:</strong> ${redirectUri}</p>
+                        </div>
+                    `;
+                } else {
+                    resultDiv.innerHTML = `
+                        <div class="error">
+                            <p>❌ Переменные окружения не настроены</p>
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                document.getElementById('env-result').innerHTML = `
+                    <div class="error">
+                        <p>❌ Ошибка: ${error.message}</p>
+                    </div>
+                `;
+            }
+        }
+        
+        async function testSheetsAPI() {
+            try {
+                const response = await fetch('/api/sheets/test');
+                const data = await response.json();
+                
+                const resultDiv = document.getElementById('sheets-result');
+                if (data.success) {
+                    resultDiv.innerHTML = `
+                        <div class="success">
+                            <p>✅ Google Sheets API работает!</p>
+                            <p>${data.message}</p>
+                        </div>
+                    `;
+                } else {
+                    resultDiv.innerHTML = `
+                        <div class="error">
+                            <p>❌ Ошибка Sheets API: ${data.error}</p>
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                document.getElementById('sheets-result').innerHTML = `
+                    <div class="error">
+                        <p>❌ Ошибка: ${error.message}</p>
+                    </div>
+                `;
+            }
+        }
+    </script>
+</body>
+</html>
